@@ -218,7 +218,7 @@ rule multiqc:
     output:
         "output/qc/multiqc/multiqc.html"
     params:
-        config['params']['multiqc']  # Optional: extra parameters for multiqc.
+        "-d %s" % config['params']['multiqc']  # Optional: extra parameters for multiqc.
     log:
         "output/logs/qc/multiqc/multiqc.log"
     benchmark:
