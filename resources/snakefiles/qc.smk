@@ -136,11 +136,11 @@ rule host_filter:
         indexed=rules.host_bowtie2_build.output
     output:
         nonhost_R1="output/qc/host_filter/nonhost/{sample}.R1.fastq.gz",
-        nonhost_R2="output/qc/host_filter/nonhost/{sample}.R2.fastq.gz",
-        host="output/qc/host_filter/host/{sample}.bam",
+        nonhost_R2="output/qc/host_filter/nonhost/{sample}.R2.fastq.gz"
     params:
         ref=host_base,
-        skip=config['host_filter']['skip']
+        skip=config['host_filter']['skip'],
+        host="output/qc/host_filter/host/{sample}.bam"
     conda:
         "../env/qc.yaml"
     threads:
@@ -162,7 +162,7 @@ rule host_filter:
               -1 {input.fastq1} -2 {input.fastq2} \
               --un-conc-gz {wildcards.sample}_nonhost \
               --no-unal \
-              2> {log} | samtools view -bS - > {output.host}
+              2> {log} | samtools view -bS - > {params.host}
 
             # rename nonhost samples
             mv {wildcards.sample}_nonhost.1 {output.nonhost_R1}
