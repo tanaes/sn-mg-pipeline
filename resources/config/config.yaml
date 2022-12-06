@@ -44,7 +44,7 @@ params:
     scaled: 1000
     extra: ''
   metaphlan:
-    db_path: "/Users/danielsprockett/Software/metaphlan3"
+    db_path: "/home/jgsanders/dbs/metaphlan3"
     db_name: "mpa_v30_CHOCOPhlAn_201901"
     other: "--add_viruses --unknown_estimation"
   metaquast:
@@ -71,8 +71,8 @@ params:
     search_engine: 'diamond'
   kraken2:
     levels: 'P,C,O,F,G,S'
-    db: '/workdir/dbs/kraken2/gtdb/ftp.tue.mpg.de/ebio/projects/struo/GTDB_release89/kraken2'
-    bracken-db: '/workdir/dbs/kraken2/gtdb/ftp.tue.mpg.de/ebio/projects/struo/GTDB_release89/bracken'
+    db: '/home/jgsanders/dbs/kraken2/gtdb/ftp.tue.mpg.de/ebio/projects/struo/GTDB_release89/kraken2'
+    bracken-db: '/home/jgsanders/dbs/kraken2/gtdb/ftp.tue.mpg.de/ebio/projects/struo/GTDB_release89/bracken'
 
 threads:
   fastqc: 1
