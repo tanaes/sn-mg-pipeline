@@ -46,7 +46,7 @@ params:
   metaphlan:
     db_path: "/home/jgsanders/dbs/metaphlan3"
     db_name: "mpa_v30_CHOCOPhlAn_201901"
-    other: "--add_viruses --unknown_estimation"
+    other: ""
   metaquast:
     reference_dir: "resources/db/metaquast/"
   minimap2:
