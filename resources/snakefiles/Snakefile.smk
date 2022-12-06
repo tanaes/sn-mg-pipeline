@@ -34,3 +34,4 @@ rule all:
         "output/prototype_selection/sourmash_plot",
         "output/prototype_selection/prototype_selection/selected_prototypes.yaml",
         "output/profile/metaphlan/merged_abundance_table.txt"
+

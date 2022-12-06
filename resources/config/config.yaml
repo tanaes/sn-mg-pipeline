@@ -99,6 +99,7 @@ mem_mb:
   megahit: 256000
 
 host_filter:
+  skip: True
   db_dir: resources/db/bt2
   genome: resources/db/bt2/GCA_000819615.1.fna # PhiX for test purposes
   # NCBI GenBank Accession number for the host genome assembly.

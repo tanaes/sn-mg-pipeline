@@ -1,5 +1,7 @@
 from os.path import splitext
 
+localrules: merge_units, skip_host_filter
+
 host_base = join(config['host_filter']['db_dir'],
                       splitext(config['host_filter']['genome'])[0])
 
@@ -80,16 +82,8 @@ rule merge_units:
     shell: "cat {input} > {output}"
 
 rule host_bowtie2_build:
-    input:
-        reference=config['host_filter']['genome']
     output:
-        multiext(host_base,
-                 ".1.bt2",
-                 ".2.bt2",
-                 ".3.bt2",
-                 ".4.bt2",
-                 ".rev.1.bt2",
-                 ".rev.2.bt2")
+        touch(host_base + ".done")
     log:
         "output/logs/qc/host_bowtie2_build/host_bowtie2_build.log"
     benchmark:
@@ -98,13 +92,25 @@ rule host_bowtie2_build:
         "../env/qc.yaml"
     params:
         extra="",  # optional parameters
-        indexbase=host_base
+        indexbase=host_base,
+        reference=config['host_filter']['genome'],
+        skip=config['host_filter']['skip']
     threads:
         config['threads']['host_filter']
     shell:
         """
-        bowtie2-build --threads {threads} {params.extra} \
-        {input.reference} {params.indexbase} 2> {log} 1>&2
+        SKIP={params.skip}
+        GENOME={params.reference}
+        if [ "$SKIP" = "True" ]; then
+            echo "Skipping host genome index." > {log}
+        elif [ -f "$GENOME" ]; then
+            echo "$FILE exists." > {log}
+            bowtie2-build --threads {threads} {params.extra} \
+                {params.reference} {params.indexbase} 2>> {log} 1>&2
+        else
+            echo "Error! Host index file not found." > {log}
+            exit 1
+        fi
         """
 
 rule host_filter:
@@ -127,13 +133,14 @@ rule host_filter:
     input:
         fastq1="output/qc/merge_units/{sample}.combined.R1.fastq.gz",
         fastq2="output/qc/merge_units/{sample}.combined.R2.fastq.gz",
-        db=rules.host_bowtie2_build.output
+        indexed=rules.host_bowtie2_build.output
     output:
         nonhost_R1="output/qc/host_filter/nonhost/{sample}.R1.fastq.gz",
         nonhost_R2="output/qc/host_filter/nonhost/{sample}.R2.fastq.gz",
         host="output/qc/host_filter/host/{sample}.bam",
     params:
-        ref=host_base
+        ref=host_base,
+        skip=config['host_filter']['skip']
     conda:
         "../env/qc.yaml"
     threads:
@@ -144,16 +151,23 @@ rule host_filter:
         "output/benchmarks/qc/host_filter/{sample}_benchmark.txt"
     shell:
         """
-        # Map reads against reference genome
-        bowtie2 -p {threads} -x {params.ref} \
-          -1 {input.fastq1} -2 {input.fastq2} \
-          --un-conc-gz {wildcards.sample}_nonhost \
-          --no-unal \
-          2> {log} | samtools view -bS - > {output.host}
+        SKIP={params.skip}
+        if [ "$SKIP" = "True" ]; then
+            echo "Skipping host genome mapping." > {log}
+            cp {input.fastq1} {output.nonhost_R1}
+            cp {input.fastq2} {output.nonhost_R2}
+        else
+            # Map reads against reference genome
+            bowtie2 -p {threads} -x {params.ref} \
+              -1 {input.fastq1} -2 {input.fastq2} \
+              --un-conc-gz {wildcards.sample}_nonhost \
+              --no-unal \
+              2> {log} | samtools view -bS - > {output.host}
 
-        # rename nonhost samples
-        mv {wildcards.sample}_nonhost.1 output/qc/host_filter/nonhost/{wildcards.sample}.R1.fastq.gz
-        mv {wildcards.sample}_nonhost.2 output/qc/host_filter/nonhost/{wildcards.sample}.R2.fastq.gz
+            # rename nonhost samples
+            mv {wildcards.sample}_nonhost.1 {output.nonhost_R1}
+            mv {wildcards.sample}_nonhost.2 {output.nonhost_R2}
+        fi
         """
 
 rule fastqc_post_host:
@@ -192,3 +206,5 @@ rule multiqc:
         "output/benchmarks/qc/multiqc/multiqc_benchmark.txt"
     wrapper:
         "v1.7.0/bio/multiqc"
+
+rule multiqc_no_host:
