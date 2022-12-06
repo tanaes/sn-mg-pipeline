@@ -23,7 +23,11 @@ rule index_contigs_bt2:
         extra = config['params']['bowtie2']['extra'],  # optional parameters
         indexbase = "output/mapping/bowtie2/indexed_contigs/{contig_sample}"
     threads:
-        config['threads']['bowtie2_build']
+        res['bowtie2_build']['threads']
+    resources:
+        partition = res['bowtie2_build']['partition'],
+        mem_mb = res['bowtie2_build']['mem_mb'],
+        qos = res['bowtie2_build']['qos']
     shell:
         """
         {params.bt2b_command} --threads {threads} \
@@ -48,7 +52,11 @@ rule map_reads_bt2:
     conda:
         "../env/mapping.yaml"
     threads:
-        config['threads']['map_reads']
+        res['map_reads']['threads']
+    resources:
+        partition = res['map_reads']['partition'],
+        mem_mb = res['map_reads']['mem_mb'],
+        qos = res['map_reads']['qos']
     benchmark:
         "output/benchmarks/mapping/bowtie2/mapped_reads/{read_sample}_Mapped_To_{contig_sample}.benchmark.txt"
     log:
@@ -75,7 +83,11 @@ rule index_contigs_minimap2:
     conda:
         "../env/mapping.yaml"
     threads:
-        config['threads']['minimap2_index']
+        res['minimap2_index']['threads']
+    resources:
+        partition = res['minimap2_index']['partition'],
+        mem_mb = res['minimap2_index']['mem_mb'],
+        qos = res['minimap2_index']['qos']
     shell:
         """
         minimap2 -d {output.index} {input.contigs} -t {threads} 2> {log}
@@ -99,7 +111,11 @@ rule map_reads_minimap2:
     conda:
         "../env/mapping.yaml"
     threads:
-        config['threads']['minimap2_map_reads']
+        res['minimap2_map_reads']['threads']
+    resources:
+        partition = res['minimap2_map_reads']['partition'],
+        mem_mb = res['minimap2_map_reads']['mem_mb'],
+        qos = res['minimap2_map_reads']['qos']
     benchmark:
         "output/benchmarks/mapping/minimap2/mapped_reads/{read_sample}_Mapped_To_{contig_sample}_benchmark.txt"
     log:
@@ -124,7 +140,11 @@ rule sort_index_bam:
     conda:
         "../env/mapping.yaml"
     threads:
-        config['threads']['sort_bam']
+        res['sort_bam']['threads']
+    resources:
+        partition = res['sort_bam']['partition'],
+        mem_mb = res['sort_bam']['mem_mb'],
+        qos = res['sort_bam']['qos']
     benchmark:
         "output/benchmarks/mapping/{mapper}/sort_index_bam/{read_sample}_Mapped_To_{contig_sample}.txt"
     log:

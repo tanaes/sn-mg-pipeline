@@ -14,7 +14,11 @@ rule taxonomy_kraken:
     conda:
         "../env/profile.yaml"
     threads:
-        config['threads']['kraken2']
+        res['kraken2']['threads']
+    resources:
+        partition = res['kraken2']['partition'],
+        mem_mb = res['kraken2']['mem_mb'],
+        qos = res['kraken2']['qos']
     log:
         "output/logs/profile/kraken2/taxonomy_kraken/{sample}.log"
     benchmark:
@@ -117,7 +121,11 @@ rule metaphlan:
     conda:
         "../env/profile.yaml"
     threads:
-        config['threads']['metaphlan']
+        res['metaphlan']['threads']
+    resources:
+        partition = res['metaphlan']['partition'],
+        mem_mb = res['metaphlan']['mem_mb'],
+        qos = res['metaphlan']['qos']
     params:
         other=config['params']['metaphlan']['other']
     benchmark:

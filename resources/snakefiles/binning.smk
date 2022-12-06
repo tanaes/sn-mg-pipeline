@@ -1,17 +1,19 @@
 
 def get_bam_list(sample, mapper, contig_pairings):
     fps = expand("output/mapping/{mapper}/sorted_bams/{contig_pairings}_Mapped_To_{sample}.bam",
-    mapper = mapper,
-    sample = sample,
-    contig_pairings = contig_pairings[sample])
+                 mapper = mapper,
+                 sample = sample,
+                 contig_pairings = contig_pairings[sample])
     return(fps)
+
 
 def get_index_list(sample, mapper, contig_pairings):
     fps = expand("output/mapping/{mapper}/sorted_bams/{contig_pairings}_Mapped_To_{sample}.bam.bai",
-    mapper = mapper,
-    sample = sample,
-    contig_pairings = contig_pairings[sample])
+                 mapper = mapper,
+                 sample = sample,
+                 contig_pairings = contig_pairings[sample])
     return(fps)
+
 
 rule make_metabat2_coverage_table:
     """
@@ -53,7 +55,11 @@ rule run_metabat2:
         min_contig_length = config['params']['metabat2']['min_contig_length'],
         extra = config['params']['metabat2']['extra']  # optional parameters
     threads:
-        config['threads']['run_metabat2']
+        res['run_metabat2']['threads']
+    resources:
+        partition=res['run_metabat2']['partition'],
+        mem_mb=res['run_metabat2']['mem_mb'],
+        qos=res['run_metabat2']['qos']
     conda:
         "../env/binning.yaml"
     benchmark:
@@ -99,9 +105,9 @@ rule make_maxbin2_abund_list:
     """
     input:
         lambda wildcards: expand("output/binning/maxbin2/{mapper}/coverage_tables/{read_sample}_Mapped_To_{contig_sample}_coverage.txt",
-                mapper = wildcards.mapper,
-                contig_sample = wildcards.contig_sample,
-                read_sample = contig_pairings[wildcards.contig_sample])
+                                 mapper=wildcards.mapper,
+                                 contig_sample=wildcards.contig_sample,
+                                 read_sample=contig_pairings[wildcards.contig_sample])
     output:
         abund_list = "output/binning/maxbin2/{mapper}/abundance_lists/{contig_sample}_abund_list.txt"
     benchmark:
@@ -121,11 +127,11 @@ rule run_maxbin2:
     """
     input:
         contigs = lambda wildcards: expand("output/assemble/{assembler}/{contig_sample}.contigs.fasta",
-                assembler = config['assemblers'],
-                contig_sample = wildcards.contig_sample),
+                                           assembler=config['assemblers'],
+                                           contig_sample=wildcards.contig_sample),
         abund_list = lambda wildcards: expand("output/binning/maxbin2/{mapper}/abundance_lists/{contig_sample}_abund_list.txt",
-                mapper=config['mappers'],
-                contig_sample=wildcards.contig_sample)
+                                              mapper=config['mappers'],
+                                              contig_sample=wildcards.contig_sample)
     output:
         bins = directory("output/binning/maxbin2/{mapper}/run_maxbin2/{contig_sample}/")
     params:
@@ -134,7 +140,11 @@ rule run_maxbin2:
         min_contig_length = config['params']['maxbin2']['min_contig_length'],
         extra = config['params']['maxbin2']['extra']  # optional parameters
     threads:
-        config['threads']['run_maxbin2']
+        res['run_maxbin2']['threads']
+    resources:
+        partition = res['run_maxbin2']['partition'],
+        mem_mb = res['run_maxbin2']['mem_mb'],
+        qos = res['run_maxbin2']['qos']
     conda:
         "../env/binning.yaml"
     benchmark:
@@ -161,8 +171,8 @@ rule cut_up_fasta:
     """
     input:
         contigs = lambda wildcards: expand("output/assemble/{assembler}/{contig_sample}.contigs.fasta",
-                assembler = config['assemblers'],
-                contig_sample = wildcards.contig_sample)
+                                           assembler=config['assemblers'],
+                                           contig_sample=wildcards.contig_sample)
     output:
         bed="output/binning/concoct/{mapper}/contigs_10K/{contig_sample}.bed",
         contigs_10K="output/binning/concoct/{mapper}/contigs_10K/{contig_sample}.fa"
@@ -224,7 +234,11 @@ rule run_concoct:
     conda:
         "../env/concoct_linux.yaml"
     threads:
-        config['threads']['run_concoct']
+        res['run_concoct']['threads']
+    resources:
+        partition = res['run_concoct']['partition'],
+        mem_mb = res['run_concoct']['mem_mb'],
+        qos = res['run_concoct']['qos']
     benchmark:
         "output/benchmarks/binning/concoct/{mapper}/run_concoct/{contig_sample}_benchmark.txt"
     log:
@@ -246,8 +260,8 @@ rule merge_cutup_clustering:
     """
     input:
         bins = lambda wildcards: expand("output/binning/concoct/{mapper}/run_concoct/{contig_sample}/{contig_sample}_bins_clustering.csv",
-                mapper = config['mappers'],
-                contig_sample = wildcards.contig_sample)
+                                        mapper=config['mappers'],
+                                        contig_sample=wildcards.contig_sample)
     output:
         merged = "output/binning/concoct/{mapper}/merge_cutup_clustering/{contig_sample}_clustering_merged.csv"
     conda:
@@ -267,8 +281,8 @@ rule extract_fasta_bins:
     """
     input:
         original_contigs = lambda wildcards: expand("output/assemble/{assembler}/{contig_sample}.contigs.fasta",
-                    assembler = config['assemblers'],
-                    contig_sample = wildcards.contig_sample),
+                                                    assembler=config['assemblers'],
+                                                    contig_sample=wildcards.contig_sample),
         clustering_merged = rules.merge_cutup_clustering.output.merged
     output:
         fasta_bins = directory("output/binning/concoct/{mapper}/extract_fasta_bins/{contig_sample}_bins/")

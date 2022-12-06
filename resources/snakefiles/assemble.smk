@@ -14,13 +14,15 @@ rule metaspades:
     conda:
         "../env/assemble.yaml"
     threads:
-        config['threads']['spades']
+        res['spades']['threads']
     benchmark:
         "output/benchmarks/assemble/metaspades/{sample}_benchmark.txt"
     log:
         "output/logs/assemble/metaspades/{sample}.log"
     resources:
-        mem_mb=config['mem_mb']['spades']
+        partition=res['spades']['partition'],
+        mem_mb=res['spades']['mem_mb'],
+        qos=res['spades']['qos']
     shell:
         """
         # Make temporary output directory
@@ -55,13 +57,15 @@ rule megahit:
     conda:
         "../env/assemble.yaml"
     threads:
-        config['threads']['megahit']
+        res['megahit']['threads']
     benchmark:
         "output/benchmarks/assemble/megahit/{sample}_benchmark.txt"
     log:
         "output/logs/assemble/megahit/{sample}.log"
     resources:
-        mem_mb=config['mem_mb']['megahit']
+        partition=res['megahit']['partition'],
+        mem_mb=res['megahit']['mem_mb'],
+        qos=res['megahit']['qos']
     shell:
         """
         megahit -t {threads} \
@@ -133,13 +137,17 @@ rule metaquast:
     output:
         report="output/assemble/{assembler}/metaquast/{sample}/report.html"
     threads:
-        config['threads']['metaquast']
+        res['metaquast']['threads']
     log:
         "output/logs/assemble/{assembler}/metaquast/{sample}.log"
     params:
         outdir=directory("output/assemble/{assembler}/metaquast/{sample}"),
         refs=config['params']['metaquast']['reference_dir'],
         extra=config['params']['metaquast']
+    resources:
+        partition=res['metaquast']['partition'],
+        mem_mb=res['metaquast']['mem_mb'],
+        qos=res['metaquast']['qos']
     conda:
         "../env/assemble.yaml"
     benchmark:

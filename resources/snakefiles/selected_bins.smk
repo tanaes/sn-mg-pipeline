@@ -119,7 +119,11 @@ rule run_DAS_Tool:
     conda:
         "../env/selected_bins.yaml"
     threads:
-        config['threads']['run_DAS_Tool']
+        res['run_DAS_Tool']['threads']
+    resources:
+        partition = res['run_DAS_Tool']['partition'],
+        mem_mb = res['run_DAS_Tool']['mem_mb'],
+        qos = res['run_DAS_Tool']['qos']
     benchmark:
         "output/benchmarks/selected_bins/{mapper}/run_DAS_Tool/{contig_sample}_benchmark.txt"
     log:

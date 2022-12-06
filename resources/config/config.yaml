@@ -2,6 +2,8 @@ samples:
   # update your samples.txt file with the paths to R1 and R2
   'resources/config/samples.txt'
 
+resources: resources/config/resources.yaml
+
 units: resources/config/units.txt
 
 binning: resources/config/binning.txt

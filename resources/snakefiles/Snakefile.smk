@@ -1,5 +1,6 @@
 import pandas as pd
 from os.path import join
+from yaml import safe_load
 
 configfile: "config.yaml"
 
@@ -9,6 +10,8 @@ units_fp = config['units']
 
 reads = config['reads']
 
+with open(config['resources'], 'r') as f:
+    res = safe_load(f)
 
 sample_table = pd.read_csv(samples_fp, sep='\t', header=0)
 sample_table.set_index('Sample', inplace=True)

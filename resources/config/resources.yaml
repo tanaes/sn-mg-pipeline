@@ -1,0 +1,85 @@
+fastqc:
+  threads: 1
+  mem_mb: 1000
+  qos: normal
+  partition: short
+cutadapt_pe:
+  threads: 4
+  mem_mb: 1000
+  qos: normal
+  partition: short
+host_filter:
+  threads: 4
+  mem_mb: 1000
+  qos: normal
+  partition: short
+spades:
+  threads: 8
+  mem_mb: 256000
+  qos: normal
+  partition: long
+metaquast:
+  threads: 8
+  mem_mb: 100000
+  qos: normal
+  partition: short
+megahit:
+  threads: 1
+  mem_mb: 1000
+  qos: normal
+  partition: long
+kraken2:
+  threads: 4
+  mem_mb: 100000
+  qos: normal
+  partition: short
+metaphlan:
+  threads: 8
+  mem_mb: 4000
+  qos: normal
+  partition: short
+bowtie2_build:
+  threads: 8
+  mem_mb: 32000
+  qos: normal
+  partition: short
+map_reads:
+  threads: 4
+  mem_mb: 16000
+  qos: normal
+  partition: short
+sort_bam:
+  threads: 8
+  mem_mb: 1000
+  qos: normal
+  partition: short
+minimap2_index:
+  threads: 4
+  mem_mb: 32000
+  qos: normal
+  partition: short
+minimap2_map_reads:
+  threads: 4
+  mem_mb: 16000
+  qos: normal
+  partition: short
+run_metabat2:
+  threads: 4
+  mem_mb: 16000
+  qos: normal
+  partition: short
+run_maxbin2:
+  threads: 4
+  mem_mb: 16000
+  qos: normal
+  partition: short
+run_concoct:
+  threads: 4
+  mem_mb: 16000
+  qos: normal
+  partition: short
+run_DAS_Tool:
+  threads: 4
+  mem_mb: 16000
+  qos: normal
+  partition: short

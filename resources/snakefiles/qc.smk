@@ -17,7 +17,11 @@ rule fastqc_pre_trim:
     benchmark:
         "output/benchmarks/qc/fastqc_pre_trim/{sample}.{unit}.{read}_benchmark.txt"
     threads:
-        config['threads']['fastqc']
+        res['fastqc']['threads']
+    resources:
+        partition = res['fastqc']['partition'],
+        mem_mb = res['fastqc']['mem_mb'],
+        qos = res['fastqc']['qos']
     wrapper:
         "0.72.0/bio/fastqc"
 
@@ -41,7 +45,11 @@ rule cutadapt_pe:
     log:
         "output/logs/qc/cutadapt_pe/{sample}.{unit}.log"
     threads:
-        config['threads']['cutadapt_pe']
+        res['cutadapt_pe']['threads']
+    resources:
+        partition = res['cutadapt_pe']['partition'],
+        mem_mb = res['cutadapt_pe']['mem_mb'],
+        qos = res['cutadapt_pe']['qos']
     wrapper:
         "0.17.4/bio/cutadapt/pe"
 
@@ -57,7 +65,11 @@ rule fastqc_post_trim:
     benchmark:
         "output/benchmarks/qc/fastqc_post_trim/{sample}_{unit}_{read}_benchmark.txt"
     threads:
-        config['threads']['fastqc']
+        res['fastqc']['threads']
+    resources:
+        partition = res['fastqc']['partition'],
+        mem_mb = res['fastqc']['mem_mb'],
+        qos = res['fastqc']['qos']
     wrapper:
         "0.72.0/bio/fastqc"
 
@@ -96,7 +108,11 @@ rule host_bowtie2_build:
         reference=config['host_filter']['genome'],
         skip=config['host_filter']['skip']
     threads:
-        config['threads']['host_filter']
+        res['bowtie2_build']['threads']
+    resources:
+        partition = res['bowtie2_build']['partition'],
+        mem_mb = res['bowtie2_build']['mem_mb'],
+        qos = res['bowtie2_build']['qos']
     shell:
         """
         SKIP={params.skip}
@@ -144,7 +160,11 @@ rule host_filter:
     conda:
         "../env/qc.yaml"
     threads:
-        config['threads']['host_filter']
+        res['host_filter']['threads']
+    resources:
+        partition = res['host_filter']['partition'],
+        mem_mb = res['host_filter']['mem_mb'],
+        qos = res['host_filter']['qos']
     log:
         "output/logs/qc/host_filter/{sample}.log"
     benchmark:
@@ -180,7 +200,11 @@ rule fastqc_post_host:
         "output/benchmarks/qc/fastqc_post_host/{sample}.{read}_benchmark.txt"
     params: ""
     threads:
-        config['threads']['fastqc']
+        res['fastqc']['threads']
+    resources:
+        partition = res['fastqc']['partition'],
+        mem_mb = res['fastqc']['mem_mb'],
+        qos = res['fastqc']['qos']
     wrapper:
         "0.72.0/bio/fastqc"
 
