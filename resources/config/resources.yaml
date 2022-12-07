@@ -16,18 +16,18 @@ host_filter:
 spades:
   threads: 8
   mem_mb: 256000
-  qos: seq_proc
+  qos: normal
   partition: long
   time: '3-00:00:00'
 metaquast:
   threads: 8
-  mem_mb: 100000
+  mem_mb: 12000
   qos: normal
   partition: short
 megahit:
-  threads: 1
+  threads: 8
   mem_mb: 72000
-  qos: seq_proc
+  qos: normal
   partition: long
   time: '1-12:00:00'
 kraken2:
