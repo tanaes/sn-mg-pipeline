@@ -224,6 +224,12 @@ rule multiqc:
         "output/qc/multiqc/multiqc.html"
     params:
         "--dirs " + config['params']['multiqc']  # Optional: extra parameters for multiqc.
+    threads:
+        res['multiqc']['threads']
+    resources:
+        partition = res['multiqc']['partition'],
+        mem_mb = res['multiqc']['mem_mb'],
+	qos = res['multiqc']['qos']
     log:
         "output/logs/qc/multiqc/multiqc.log"
     benchmark:

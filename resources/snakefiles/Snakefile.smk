@@ -14,10 +14,12 @@ with open(config['resources'], 'r') as f:
     res = safe_load(f)
 
 sample_table = pd.read_csv(samples_fp, sep='\t', header=0)
+sample_table['Sample'] = sample_table['Sample'].astype(str)
 sample_table.set_index('Sample', inplace=True)
 
 units_table = pd.read_csv(units_fp, sep='\t', header=0)
 units_table = units_table.loc[units_table['Sample'].isin(sample_table.index)]
+units_table[['Sample','Unit']] = units_table[['Sample','Unit']].astype(str)
 units_table.set_index(['Sample', 'Unit'], inplace=True)
 
 samples = sample_table.index

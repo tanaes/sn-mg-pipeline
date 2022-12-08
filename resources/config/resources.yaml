@@ -3,6 +3,11 @@ fastqc:
   mem_mb: 1000
   qos: normal
   partition: short
+multiqc:
+  threads: 4
+  mem_mb: 32000
+  qos: normal
+  partition: short
 cutadapt_pe:
   threads: 4
   mem_mb: 1000
@@ -17,8 +22,13 @@ spades:
   threads: 8
   mem_mb: 256000
   qos: normal
-  partition: long
+  partition: short
   time: '3-00:00:00'
+quast:
+  threads: 4
+  mem_mb: 12000
+  qos: normal
+  partition: short
 metaquast:
   threads: 8
   mem_mb: 12000
@@ -28,7 +38,7 @@ megahit:
   threads: 8
   mem_mb: 72000
   qos: normal
-  partition: long
+  partition: short
   time: '1-12:00:00'
 kraken2:
   threads: 4

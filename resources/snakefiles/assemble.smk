@@ -94,7 +94,11 @@ rule quast:
     params:
         outdir=directory("output/assemble/{assembler}/quast/{sample}/")
     threads:
-        1
+        res['quast']['threads']
+    resources:
+        partition=res['quast']['partition'],
+        mem_mb=res['quast']['mem_mb'],
+        qos=res['quast']['qos']
     log:
         "output/logs/assemble/{assembler}/quast/{sample}.log"
     conda:
