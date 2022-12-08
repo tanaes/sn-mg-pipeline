@@ -10,11 +10,11 @@ multiqc:
   partition: short
 cutadapt_pe:
   threads: 4
-  mem_mb: 1000
+  mem_mb: 8000
   qos: normal
   partition: short
 host_filter:
-  threads: 4
+  threads: 1
   mem_mb: 1000
   qos: normal
   partition: short
@@ -25,8 +25,8 @@ spades:
   partition: short
   time: '3-00:00:00'
 quast:
-  threads: 4
-  mem_mb: 12000
+  threads: 1
+  mem_mb: 8000
   qos: normal
   partition: short
 metaquast:
@@ -36,7 +36,7 @@ metaquast:
   partition: short
 megahit:
   threads: 8
-  mem_mb: 72000
+  mem_mb: 32000
   qos: normal
   partition: short
   time: '1-12:00:00'
