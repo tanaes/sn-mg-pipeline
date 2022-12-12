@@ -5,7 +5,12 @@ fastqc:
   partition: short
 multiqc:
   threads: 4
-  mem_mb: 32000
+  mem_mb: 64000
+  qos: normal
+  partition: short
+sourmash_dm:
+  threads: 4
+  mem_mb: 64000
   qos: normal
   partition: short
 cutadapt_pe:

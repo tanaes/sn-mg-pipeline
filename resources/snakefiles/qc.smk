@@ -229,7 +229,7 @@ rule multiqc:
     resources:
         partition = res['multiqc']['partition'],
         mem_mb = res['multiqc']['mem_mb'],
-	qos = res['multiqc']['qos']
+        qos = res['multiqc']['qos']
     log:
         "output/logs/qc/multiqc/multiqc.log"
     benchmark:
@@ -237,4 +237,3 @@ rule multiqc:
     wrapper:
         "v1.7.0/bio/multiqc"
 
-rule multiqc_no_host:

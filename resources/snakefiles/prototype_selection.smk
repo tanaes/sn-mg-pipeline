@@ -203,6 +203,10 @@ rule sourmash_dm:
     log:
         "output/logs/prototype_selection/sourmash_dm/sourmash_dm.log"
     threads: 1
+    resources:
+        partition = res['sourmash_dm']['partition'],
+        mem_mb = res['sourmash_dm']['mem_mb'],
+        qos = res['sourmash_dm']['qos']
     conda: "../env/prototype_selection.yaml"
     shell:
         """
