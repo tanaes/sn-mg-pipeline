@@ -125,6 +125,10 @@ rule multiqc_assemble:
         "--dirs " + config['params']['multiqc']  # Optional: extra parameters for multiqc.
     log:
         "output/logs/assemble/multiqc_assemble/multiqc_assemble.log"
+    resources:
+        partition = res['multiqc']['partition'],
+        mem_mb = res['multiqc']['mem_mb'],
+        qos = res['multiqc']['qos']
     benchmark:
         "output/benchmarks/assemble/multiqc_assemble/multiqc_assemble_benchmark.txt"
     wrapper:
@@ -175,6 +179,10 @@ rule multiqc_metaquast:
         "output/assemble/multiqc_metaquast/multiqc.html"
     params:
         "--dirs " + config['params']['multiqc']  # Optional: extra parameters for multiqc.
+    resources:
+        partition = res['multiqc']['partition'],
+        mem_mb = res['multiqc']['mem_mb'],
+        qos = res['multiqc']['qos']
     log:
         "output/logs/assemble/multiqc_metaquast/multiqc_metaquast.log"
     benchmark:
