@@ -3,9 +3,9 @@ from shutil import copyfile
 from glob import glob
 
 
-rule metabat2_Fasta_to_Contigs2Bin:
+rule metabat2_Fasta_to_Contig2Bin:
     """
-    Uses Fasta_to_Contigs2Bin script in DAS Tools to generate a contigs2bin.tsv file.
+    Uses Fasta_to_Contig2Bin script in DAS Tools to generate a contigs2bin.tsv file.
     """
     input:
         bins = lambda wildcards: expand("output/binning/metabat2/{mapper}/run_metabat2/{contig_sample}/",
@@ -21,15 +21,15 @@ rule metabat2_Fasta_to_Contigs2Bin:
         "output/logs/selected_bins/metabat2/{mapper}/contigs2bin/{contig_sample}.log"
     shell:
         """ 
-            Fasta_to_Contigs2Bin.sh \
+            Fasta_to_Contig2Bin.sh \
             -i {input.bins} \
             -e fa > {output.contigs2bin} 2> {log}
         """
 
 
-rule maxbin2_Fasta_to_Contigs2Bin:
+rule maxbin2_Fasta_to_Contig2Bin:
     """
-    Uses Fasta_to_Contigs2Bin script in DAS Tools to generate a contigs2bin.tsv file.
+    Uses Fasta_to_Contig2Bin script in DAS Tools to generate a contigs2bin.tsv file.
     """
     input:
         bins = lambda wildcards: expand("output/binning/maxbin2/{mapper}/run_maxbin2/{contig_sample}/",
@@ -45,14 +45,14 @@ rule maxbin2_Fasta_to_Contigs2Bin:
         "output/logs/selected_bins/maxbin2/{mapper}/contigs2bin/{contig_sample}.log"
     shell:
         """
-            Fasta_to_Contigs2Bin.sh \
+            Fasta_to_Contig2Bin.sh \
             -i {input.bins} \
             -e fasta > {output.contigs2bin} 2> {log}
         """
 
-rule concoct_Fasta_to_Contigs2Bin:
+rule concoct_Fasta_to_Contig2Bin:
     """
-    Uses Fasta_to_Contigs2Bin script in DAS Tools to generate a contigs2bin.tsv file.
+    Uses Fasta_to_Contig2Bin script in DAS Tools to generate a contigs2bin.tsv file.
     """
     input:
         bins = lambda wildcards: expand("output/binning/concoct/{mapper}/extract_fasta_bins/{contig_sample}_bins/",
@@ -68,12 +68,12 @@ rule concoct_Fasta_to_Contigs2Bin:
         "output/logs/selected_bins/concoct/{mapper}/contigs2bin/{contig_sample}.log"
     shell:
         """
-            Fasta_to_Contigs2Bin.sh \
+            Fasta_to_Contig2Bin.sh \
             -i {input.bins} \
             -e fa > {output.contigs2bin} 2> {log}
         """
 
-# rule concoct_Fasta_to_Contigs2Bin:
+# rule concoct_Fasta_to_Contig2Bin:
 #     """
 #     Uses perl to create a contigs2bin.tsv file from a clustering_merged.csv file.
 #     """
