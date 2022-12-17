@@ -1,7 +1,6 @@
 channels:
-  - defaults
-  - bioconda
   - conda-forge
+  - bioconda
 dependencies:
   - python=3
   - concoct=1
