@@ -20,10 +20,10 @@ rule metabat2_Fasta_to_Contigs2Bin:
     log:
         "output/logs/selected_bins/metabat2/{mapper}/contigs2bin/{contig_sample}.log"
     shell:
-        """
+        """ 
             Fasta_to_Contigs2Bin.sh \
             -i {input.bins} \
-            -e fa > {output.contigs2bin}
+            -e fa > {output.contigs2bin} 2> {log}
         """
 
 
@@ -47,7 +47,7 @@ rule maxbin2_Fasta_to_Contigs2Bin:
         """
             Fasta_to_Contigs2Bin.sh \
             -i {input.bins} \
-            -e fasta > {output.contigs2bin}
+            -e fasta > {output.contigs2bin} 2> {log}
         """
 
 rule concoct_Fasta_to_Contigs2Bin:
@@ -70,7 +70,7 @@ rule concoct_Fasta_to_Contigs2Bin:
         """
             Fasta_to_Contigs2Bin.sh \
             -i {input.bins} \
-            -e fa > {output.contigs2bin}
+            -e fa > {output.contigs2bin} 2> {log}
         """
 
 # rule concoct_Fasta_to_Contigs2Bin:
