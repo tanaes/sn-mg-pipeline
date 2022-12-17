@@ -1,5 +1,7 @@
 import pandas as pd
 from os.path import join
+from yaml import safe_load
+
 
 configfile: "config.yaml"
 

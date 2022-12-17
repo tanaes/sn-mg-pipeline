@@ -67,7 +67,7 @@ map_reads:
   partition: short
 sort_bam:
   threads: 8
-  mem_mb: 1000
+  mem_mb: 16000
   qos: normal
   partition: short
 minimap2_index:
