@@ -135,8 +135,8 @@ rule run_DAS_Tool:
             --contigs {input.contigs} \
             --outputbasename {params.basename} \
             --labels metabat2,maxbin2,concoct \
-            --write_bins 1 \
-            --write_bin_evals 1 \
+            --write_bins \
+            --write_bin_evals \
             --threads {threads} \
             --search_engine {params.search_engine}
         """
