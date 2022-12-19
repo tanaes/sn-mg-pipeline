@@ -70,7 +70,7 @@ rule concoct_Fasta_to_Contig2Bin:
         """
             Fasta_to_Contig2Bin.sh \
             -i {input.bins} \
-            -e fa  | perl -pe 's/(.*?)\s.*\t(.*)$/\1\t\2/' > {output.contigs2bin} 2> {log}
+            -e fa  | perl -pe 's/(.*?)\s.*\\t(.*)$/\\1\\t\\2/' > {output.contigs2bin} 2> {log}
         """
 
 # rule concoct_Fasta_to_Contig2Bin:
