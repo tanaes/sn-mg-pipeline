@@ -2,6 +2,7 @@ from os.path import basename, dirname, join
 from shutil import copyfile
 from glob import glob
 
+localrules: consolidate_DAS_Tool_bins
 
 rule metabat2_Fasta_to_Contig2Bin:
     """
@@ -156,11 +157,13 @@ rule consolidate_DAS_Tool_bins:
         sample = wildcards.contig_sample 
         fasta_dir = join(dirname(input[0]),
                          sample + '_DASTool_bins')
+        
         output_dir = dirname(output.done)
-
+        # print(output_dir)
+        # print(fasta_dir)
         fasta_files = glob(join(fasta_dir, '*.fa'))
-
-        for file in fasta_file:
+        # print(fasta_files)
+        for file in fasta_files:
             copyfile(file,
                      join(output.out,
                           sample + '_' + basename(file)))
