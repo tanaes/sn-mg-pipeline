@@ -165,7 +165,7 @@ rule consolidate_DAS_Tool_bins:
         # print(fasta_files)
         for file in fasta_files:
             copyfile(file,
-                     join(output.out,
+                     join(output_dir,
                           sample + '_' + basename(file)))
 
 rule consolidate_DAS_Tool_bins_all:
