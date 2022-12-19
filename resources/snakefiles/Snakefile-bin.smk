@@ -71,10 +71,10 @@ contig_groups = parse_groups(binning_df['Contig_Groups'])
 read_groups = parse_groups(binning_df['Read_Groups'])
 pairings, contig_pairings = make_pairings(read_groups, contig_groups)
 
-print('Contig samples: %s' % contig_groups)
-print('Read samples: %s' % read_groups)
-print('Pairings: %s' % pairings)
-print('Contig Pairings: %s' % contig_pairings)
+# print('Contig samples: %s' % contig_groups)
+# print('Read samples: %s' % read_groups)
+# print('Pairings: %s' % pairings)
+# print('Contig Pairings: %s' % contig_pairings)
 
 def get_contigs(sample, binning_df):
     return(binning_df.loc[sample, 'Contigs'])
