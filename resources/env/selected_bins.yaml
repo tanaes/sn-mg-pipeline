@@ -3,4 +3,5 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
-  - das_tool=>1.1.5
+  - pip:
+    - git+https://github.com/cmks/DAS_Tool.git
