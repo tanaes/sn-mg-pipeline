@@ -100,3 +100,8 @@ run_DAS_Tool:
   mem_mb: 16000
   qos: normal
   partition: short
+run_drep:
+  threads: 4
+  mem_mb: 16000
+  qos: normal
+  partition: short

@@ -71,6 +71,8 @@ params:
     min_contig_length: 1500
   das_tool:
     search_engine: 'diamond'
+  drep:
+    extra: ''
   kraken2:
     levels: 'P,C,O,F,G,S'
     db: '/home/jgsanders/dbs/kraken2/gtdb/ftp.tue.mpg.de/ebio/projects/struo/GTDB_release89/kraken2'

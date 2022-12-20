@@ -1,0 +1,10 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - drep
+  - matplotlib
+  - pysam
+  - pplacer
+  - hmmer
+  - checkm-genome>=1.1.0

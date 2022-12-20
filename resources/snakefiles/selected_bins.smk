@@ -175,3 +175,35 @@ rule consolidate_DAS_Tool_bins_all:
                                  contig_sample=contig_pairings.keys())
 
 
+
+rule run_dRep:
+    """
+    Dereplicate bins using dRep
+    """
+    input:
+        lambda wildcards: expand("output/selected_bins/{mapper}/DAS_Tool_Fastas/{contig_sample}.done",
+                                 mapper=config['mappers'],
+                                 contig_sample=contig_pairings.keys())
+    output:
+        outdir=directory("output/selected_bins/{mapper}/dRep"),
+        outfig="output/selected_bins/{mapper}/dRep/figures/Winning_genomes.pdf"
+    params:
+        extra=config['params']['drep']['extra']
+    conda:
+        "../env/drep.yaml"
+    threads:
+        res['run_drep']['threads']
+    resources:
+        partition = res['run_drep']['partition'],
+        mem_mb = res['run_drep']['mem_mb'],
+        qos = res['run_drep']['qos']
+    benchmark:
+        "output/benchmarks/selected_bins/{mapper}/dRep/run_drep_benchmark.txt"
+    log:
+        "output/logs/selected_bins/{mapper}/dRep/run_drep.log"
+    shell:
+        """
+            dRep dereplicate {output.outdir} {params.extra} \
+              -p {threads} \
+              -g output/selected_bins/{wildcards.mapper}/*.fa 2> {log} 1>&2
+        """

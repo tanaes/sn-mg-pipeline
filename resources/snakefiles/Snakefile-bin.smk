@@ -92,6 +92,11 @@ rule select_bins:
                                  mapper=config['mappers'],
                                  contig_sample=contig_pairings.keys())
 
+rule dereplicate:
+    input:
+        lambda wildcards: expand("output/selected_bins/{mapper}/dRep/figures/Winning_genomes.pdf",
+                                 mapper=config['mappers'])
+
 rule bin_all:
     input:
         expand("output/binning/metabat2/{mapper}/run_metabat2/{contig_sample}/",
