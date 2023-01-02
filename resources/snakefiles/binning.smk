@@ -210,6 +210,12 @@ rule make_concoct_coverage_table:
         "../env/concoct_linux.yaml"
     benchmark:
         "output/benchmarks/binning/concoct/{mapper}/make_concoct_coverage_table/{contig_sample}_benchmark.txt"
+    threads:
+        res['make_concoct_coverage_table']['threads']
+    resources:
+        partition = res['make_concoct_coverage_table']['partition'],
+        mem_mb = res['make_concoct_coverage_table']['mem_mb'],
+        qos = res['make_concoct_coverage_table']['qos']
     log:
         "output/logs/binning/concoct/{mapper}/make_concoct_coverage_table/{contig_sample}.log"
     shell:

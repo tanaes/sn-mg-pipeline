@@ -137,6 +137,7 @@ rule run_DAS_Tool:
             --outputbasename {params.basename} \
             --labels metabat2,maxbin2,concoct \
             --write_bins \
+            --debug \
             --write_bin_evals \
             --threads {threads} \
             --search_engine {params.search_engine} 2> {log} 1>&2
@@ -205,5 +206,5 @@ rule run_dRep:
         """
             dRep dereplicate {output.outdir} {params.extra} \
               -p {threads} \
-              -g output/selected_bins/{wildcards.mapper}/*.fa 2> {log} 1>&2
+              -g output/selected_bins/{wildcards.mapper}/DAS_Tool_Fastas/*.fa 2> {log} 1>&2
         """
