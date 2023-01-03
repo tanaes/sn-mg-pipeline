@@ -159,7 +159,7 @@ rule run_maxbin2:
             -min_contig_length {params.min_contig_length} {params.extra} \
             -contig {input.contigs} \
             -abund_list {input.abund_list} \
-            -out {params.basename}
+            -out {params.basename} \
             2> {log} 1>&2
         """
 
