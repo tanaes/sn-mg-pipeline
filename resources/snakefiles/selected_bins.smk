@@ -153,14 +153,15 @@ rule consolidate_DAS_Tool_bins_all:
         lambda wildcards: expand("output/selected_bins/{mapper}/DAS_Tool_Fastas/{contig_sample}.done",
                                  mapper=config['mappers'],
                                  contig_sample=contig_pairings.keys())
-
+    output:
+        "output/selected_bins/{mapper}/DAS_Tool_Fastas/all.done"
 
 rule prepare_dRep:
     """
     Create file of paths for dRep
     """
     input:
-        "output/selected_bins/{mapper}/DAS_Tool_Fastas/{contig_sample}.done"
+        "output/selected_bins/{mapper}/DAS_Tool_Fastas/all.done"
     output:
         "output/selected_bins/{mapper}/DAS_Tool_Fastas.input.txt"
     run:
