@@ -2,7 +2,7 @@ from os.path import basename, dirname, join
 from shutil import copyfile
 from glob import glob
 
-localrules: consolidate_DAS_Tool_bins
+localrules: consolidate_DAS_Tool_bins, prepare_dRep
 
 rule metabat2_Fasta_to_Contig2Bin:
     """
@@ -155,15 +155,28 @@ rule consolidate_DAS_Tool_bins_all:
                                  contig_sample=contig_pairings.keys())
 
 
+rule prepare_dRep:
+    """
+    Create file of paths for dRep
+    """
+    input:
+        lambda wildcards: expand("output/selected_bins/{mapper}/DAS_Tool_Fastas/{contig_sample}.done",
+                                 mapper=config['mappers'],
+                                 contig_sample=contig_pairings.keys())
+    output:
+        "output/selected_bins/{mapper}/DAS_Tool_Fastas.input.txt"
+    run:
+        with open(output, 'w') as f:
+            for p in input:
+                f.write('%s\n')
+
 
 rule run_dRep:
     """
     Dereplicate bins using dRep
     """
     input:
-        lambda wildcards: expand("output/selected_bins/{mapper}/DAS_Tool_Fastas/{contig_sample}.done",
-                                 mapper=config['mappers'],
-                                 contig_sample=contig_pairings.keys())
+         "output/selected_bins/{mapper}/DAS_Tool_Fastas.input.txt"
     output:
         outdir=directory("output/selected_bins/{mapper}/dRep"),
         outfig="output/selected_bins/{mapper}/dRep/figures/Winning_genomes.pdf"
@@ -185,5 +198,5 @@ rule run_dRep:
         """
             dRep dereplicate {output.outdir} {params.extra} \
               -p {threads} \
-              -g output/selected_bins/{wildcards.mapper}/DAS_Tool_Fastas/*.fa 2> {log} 1>&2
+              -g {input} 2> {log} 1>&2
         """
