@@ -160,15 +160,15 @@ rule prepare_dRep:
     Create file of paths for dRep
     """
     input:
-        lambda wildcards: expand("output/selected_bins/{mapper}/DAS_Tool_Fastas/{contig_sample}.done",
-                                 mapper=config['mappers'],
-                                 contig_sample=contig_pairings.keys())
+        "output/selected_bins/{mapper}/DAS_Tool_Fastas/{contig_sample}.done"
     output:
         "output/selected_bins/{mapper}/DAS_Tool_Fastas.input.txt"
     run:
-        with open(output[0], 'w') as f:
-            for p in input:
-                f.write('%s\n' % p)
+        fasta_dir = dirname(input[0])
+        fastas = glob(join(fasta_dir, '*.fa'))
+        with open(output, 'w') as f:
+            for fasta in fastas:
+                f.write('%s\n')
 
 
 rule run_dRep:
