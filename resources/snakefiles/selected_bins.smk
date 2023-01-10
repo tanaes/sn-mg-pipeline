@@ -168,8 +168,8 @@ rule prepare_dRep:
         fasta_dir = dirname(input[0])
         fastas = glob(join(fasta_dir, '*.fa'))
         with open(output[0], 'w') as f:
-            for fasta in fastas:
-                f.write('%s\n')
+            for path in fastas:
+                f.write('%s\n' % path)
 
 
 rule run_dRep:
