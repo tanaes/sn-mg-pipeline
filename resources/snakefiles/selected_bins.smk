@@ -166,9 +166,9 @@ rule prepare_dRep:
     output:
         "output/selected_bins/{mapper}/DAS_Tool_Fastas.input.txt"
     run:
-        with open(output, 'w') as f:
+        with open(output[0], 'w') as f:
             for p in input:
-                f.write('%s\n')
+                f.write('%s\n' % p)
 
 
 rule run_dRep:
