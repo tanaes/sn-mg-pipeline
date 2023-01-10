@@ -154,7 +154,7 @@ rule consolidate_DAS_Tool_bins_all:
                                  mapper=config['mappers'],
                                  contig_sample=contig_pairings.keys())
     output:
-        "output/selected_bins/{mapper}/DAS_Tool_Fastas/all.done"
+        touch("output/selected_bins/{mapper}/DAS_Tool_Fastas/all.done")
 
 rule prepare_dRep:
     """
