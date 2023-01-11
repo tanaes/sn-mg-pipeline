@@ -1,4 +1,5 @@
 from os.path import basename, dirname, join
+from pathlib import Path
 from shutil import copyfile
 from glob import glob
 
@@ -158,18 +159,40 @@ rule consolidate_DAS_Tool_bins_all:
 
 rule prepare_dRep:
     """
-    Create file of paths for dRep
+    Create input files for dRep
     """
     input:
-        "output/selected_bins/{mapper}/DAS_Tool_Fastas/all.done"
+        summaries = lambda wildcards: expand("output/selected_bins/{mapper}/run_DAS_Tool/{contig_sample}/{contig_sample}_DASTool_summary.tsv",
+                                             mapper=wildcards.mapper,
+                                             contig_sample=contig_pairings.keys()),
+        renamed = "output/selected_bins/{mapper}/DAS_Tool_Fastas/all.done"
     output:
-        "output/selected_bins/{mapper}/DAS_Tool_Fastas.input.txt"
+        paths = "output/selected_bins/{mapper}/DAS_Tool_Fastas.input.txt",
+        stats = "output/selected_bins/{mapper}/DAS_Tool_Fastas.stats.csv"
     run:
         fasta_dir = dirname(input[0])
         fastas = glob(join(fasta_dir, '*.fa'))
-        with open(output[0], 'w') as f:
+        with open(output.paths, 'w') as f:
             for path in fastas:
                 f.write('%s\n' % path)
+        stats = []
+        for summary in input.summaries:
+            summary_df = pd.read_csv(summary,
+                                     sep='\t',
+                                     index_col=0)
+            sample = Path(summary).parts[4]
+            summary_df['bin_name'] = ['{0}_{1}.{2}'.format(sample,
+                                                           str(x),
+                                                           'fa') for x in summary_df.index]
+            stats.append(summary_df[['bin_name',
+                                     'SCG_completeness',
+                                     'SCG_redundancy']].reset_index(drop=True))
+        stats_df = pd.concat(stats)
+        stats_df.columns = ['genome',
+                            'completeness',
+                            'contamination']
+        stats_df.to_csv(output.stats,
+                        index=False)
 
 
 rule run_dRep:
@@ -177,7 +200,8 @@ rule run_dRep:
     Dereplicate bins using dRep
     """
     input:
-         "output/selected_bins/{mapper}/DAS_Tool_Fastas.input.txt"
+        paths = "output/selected_bins/{mapper}/DAS_Tool_Fastas.input.txt",
+        stats = "output/selected_bins/{mapper}/DAS_Tool_Fastas.stats.csv"
     output:
         outdir=directory("output/selected_bins/{mapper}/dRep"),
         outfig="output/selected_bins/{mapper}/dRep/figures/Winning_genomes.pdf"
@@ -199,5 +223,6 @@ rule run_dRep:
         """
             dRep dereplicate {output.outdir} {params.extra} \
               -p {threads} \
-              -g {input} 2> {log} 1>&2
+              -g {input.paths} \
+              --genomeInfo {input.stats} 2> {log} 1>&2
         """
