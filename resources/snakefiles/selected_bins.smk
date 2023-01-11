@@ -1,4 +1,5 @@
 from os.path import basename, dirname, join
+
 from pathlib import Path
 from shutil import copyfile
 from glob import glob
@@ -170,7 +171,7 @@ rule prepare_dRep:
         paths = "output/selected_bins/{mapper}/DAS_Tool_Fastas.input.txt",
         stats = "output/selected_bins/{mapper}/DAS_Tool_Fastas.stats.csv"
     run:
-        fasta_dir = dirname(input[0])
+        fasta_dir = dirname(input.renamed)
         fastas = glob(join(fasta_dir, '*.fa'))
         with open(output.paths, 'w') as f:
             for path in fastas:
