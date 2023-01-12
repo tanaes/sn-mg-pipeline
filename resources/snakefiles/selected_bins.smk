@@ -215,7 +215,8 @@ rule run_dRep:
     resources:
         partition = res['run_drep']['partition'],
         mem_mb = res['run_drep']['mem_mb'],
-        qos = res['run_drep']['qos']
+        qos = res['run_drep']['qos'],
+        time = res['run_drep']['time']
     benchmark:
         "output/benchmarks/selected_bins/{mapper}/dRep/run_drep_benchmark.txt"
     log:
