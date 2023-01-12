@@ -90,6 +90,11 @@ run_maxbin2:
   mem_mb: 16000
   qos: normal
   partition: short
+make_concoct_coverage_table:
+  threads: 1
+  mem_mb: 16000
+  qos: normal
+  partition: short
 run_concoct:
   threads: 4
   mem_mb: 16000
@@ -101,7 +106,8 @@ run_DAS_Tool:
   qos: normal
   partition: short
 run_drep:
-  threads: 4
-  mem_mb: 16000
+  threads: 32
+  mem_mb: 64000
   qos: normal
+  time: 10-00:00:00
   partition: short
