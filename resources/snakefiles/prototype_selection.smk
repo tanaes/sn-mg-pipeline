@@ -195,13 +195,13 @@ rule sourmash_sketch_reads:
 rule sourmash_dm:
     input:
         expand(rules.sourmash_sketch_reads.output,
-               sample=samples)
+               sample=lambda wc: cohorts[wc.cohort])
     output:
-        dm = "output/prototype_selection/sourmash_dm/sourmash.dm",
-        csv = "output/prototype_selection/sourmash_dm/sourmash.csv",
-        labels = "output/prototype_selection/sourmash_dm/sourmash.dm.labels.txt"
+        dm = "output/prototype_selection/sourmash_dm/{cohort}.dm",
+        csv = "output/prototype_selection/sourmash_dm/{cohort}.csv",
+        labels = "output/prototype_selection/sourmash_dm/{cohort}.dm.labels.txt"
     log:
-        "output/logs/prototype_selection/sourmash_dm/sourmash_dm.log"
+        "output/logs/prototype_selection/sourmash_dm/{cohort}_sourmash_dm.log"
     threads: 1
     resources:
         partition = res['sourmash_dm']['partition'],
@@ -220,9 +220,9 @@ rule sourmash_plot:
     input:
         rules.sourmash_dm.output.dm
     output:
-        directory("output/prototype_selection/sourmash_plot/")
+        directory("output/prototype_selection/sourmash_plot_{cohort}/")
     log:
-        "output/logs/prototype_selection/sourmash_plot/sourmash_plot.log"
+        "output/logs/prototype_selection/sourmash_plot/sourmash_plot_{cohort}.log"
     threads: 1
     conda: "../env/prototype_selection.yaml"
     shell:
@@ -238,12 +238,12 @@ rule prototype_selection:
         labels = rules.sourmash_dm.output.labels,
         # depth = "output/qc/multiqc/multiqc_data/mqc_fastqc_sequence_counts_plot_1.txt"
     output:
-        file = "output/prototype_selection/prototype_selection/selected_prototypes.yaml"
+        file = "output/prototype_selection/prototype_selection/selected_prototypes_{cohort}.yaml"
     params:
         min_seqs = config['params']['prototypes']['min_seqs'],
         max_seqs = config['params']['prototypes']['max_seqs']
     log:
-        "output/logs/prototype_selection/prototype_selection/prototype_selection.log"
+        "output/logs/prototype_selection/prototype_selection/prototype_selection_{cohort}.log"
     threads: 1
     run:
         df = pd.read_csv(input[0], header=0, encoding= 'unicode_escape')
