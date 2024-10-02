@@ -52,7 +52,7 @@ kraken2:
   partition: short
 metaphlan:
   threads: 8
-  mem_mb: 4000
+  mem_mb: 32000
   qos: normal
   partition: short
 bowtie2_build:
