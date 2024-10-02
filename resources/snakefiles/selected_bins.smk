@@ -209,7 +209,7 @@ rule run_dRep:
     params:
         extra=config['params']['drep']['extra']
     conda:
-        "../env/drep.yaml"
+        "drep_test"
     threads:
         res['run_drep']['threads']
     resources:

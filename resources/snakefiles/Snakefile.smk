@@ -14,10 +14,12 @@ with open(config['resources'], 'r') as f:
     res = safe_load(f)
 
 sample_table = pd.read_csv(samples_fp, sep='\t', header=0)
+cohorts = sample_table.groupby('Cohort')['Sample'].apply(list).to_dict()
 sample_table['Sample'] = sample_table['Sample'].astype(str)
 sample_table.set_index('Sample', inplace=True)
 
-cohorts = sample_table.groupby('Cohort')['Sample'].apply(list).to_dict()
+cohorts_list = list(cohorts.keys())
+
 
 units_table = pd.read_csv(units_fp, sep='\t', header=0)
 units_table = units_table.loc[units_table['Sample'].isin(sample_table.index)]
@@ -40,7 +42,7 @@ rule all:
         "output/qc/multiqc/multiqc.html",
         "output/assemble/multiqc_assemble/multiqc.html",
         "output/prototype_selection/sourmash_plot",
-        "output/prototype_selection/prototype_selection/selected_prototypes_{cohort}.yaml",
+        expand("output/prototype_selection/sourmash_dm/{cohort}.dm", cohort=cohorts_list),
         "output/profile/metaphlan/merged_abundance_table.txt"
 
 rule no_profile:
@@ -48,4 +50,4 @@ rule no_profile:
         "output/qc/multiqc/multiqc.html",
         "output/assemble/multiqc_assemble/multiqc.html",
         "output/prototype_selection/sourmash_plot",
-        "output/prototype_selection/prototype_selection/selected_prototypes.yaml"
+        expand("output/prototype_selection/sourmash_dm/{cohort}.dm", cohort=cohorts_list),
