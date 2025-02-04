@@ -5,6 +5,10 @@ from os import path
 from skbio import DistanceMatrix
 from yaml import dump
 
+def get_cohort_samples(cohort):
+    """Returns the list of samples for a given cohort."""
+    return cohorts[cohort]
+
 def _validate_parameters(dm, num_prototypes, seedset=None):
     '''Validate the paramters for each algorithm.
     Parameters
@@ -194,8 +198,8 @@ rule sourmash_sketch_reads:
 
 rule sourmash_dm:
     input:
-        expand(rules.sourmash_sketch_reads.output,
-               sample=lambda wc: cohorts[wc.cohort])
+        lambda wildcards: expand(rules.sourmash_sketch_reads.output,
+                                 sample=get_cohort_samples(wildcards.cohort))
     output:
         dm = "output/prototype_selection/sourmash_dm/{cohort}.dm",
         csv = "output/prototype_selection/sourmash_dm/{cohort}.csv",

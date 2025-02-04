@@ -42,7 +42,7 @@ rule all:
         "output/qc/multiqc/multiqc.html",
         "output/assemble/multiqc_assemble/multiqc.html",
         "output/prototype_selection/sourmash_plot",
-        expand("output/prototype_selection/sourmash_dm/{cohort}.dm", cohort=cohorts_list),
+        expand("output/prototype_selection/prototype_selection/selected_prototypes_{cohort}.yaml", cohort=cohorts_list),
         "output/profile/metaphlan/merged_abundance_table.txt"
 
 rule no_profile:
@@ -50,4 +50,5 @@ rule no_profile:
         "output/qc/multiqc/multiqc.html",
         "output/assemble/multiqc_assemble/multiqc.html",
         "output/prototype_selection/sourmash_plot",
-        expand("output/prototype_selection/sourmash_dm/{cohort}.dm", cohort=cohorts_list),
+        expand("output/prototype_selection/prototype_selection/selected_prototypes_{cohort}.yaml", cohort=cohorts_list),
+
